@@ -4,7 +4,7 @@ package protonats;
 
 import "google/protobuf/descriptor.proto";
 
-option go_package = "xiam.li/protonats/go;protonats";
+option go_package = "xiam.li/protonats/go/protonats";
 option java_package = "com.xiamli.protonats";
 option java_outer_classname = "ProtoNATS";
 

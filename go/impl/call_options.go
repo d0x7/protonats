@@ -3,7 +3,7 @@ package impl
 import (
 	"context"
 	"time"
-	"xiam.li/protonats/go"
+	"xiam.li/protonats/go/protonats"
 )
 
 type CallOpts struct {

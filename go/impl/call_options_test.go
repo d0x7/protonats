@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 	"time"
-	"xiam.li/protonats/go"
+	"xiam.li/protonats/go/protonats"
 )
 
 func TestCallOpts_WithInstanceID(t *testing.T) {

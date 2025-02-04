@@ -4,7 +4,7 @@ import (
 	"github.com/nats-io/nats.go/micro"
 	"reflect"
 	"testing"
-	"xiam.li/protonats/go"
+	"xiam.li/protonats/go/protonats"
 )
 
 func TestServerOpts_WithServiceVersion(t *testing.T) {

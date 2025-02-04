@@ -3,7 +3,7 @@ package impl
 import (
 	"github.com/nats-io/nats.go/micro"
 	"time"
-	"xiam.li/protonats/go"
+	"xiam.li/protonats/go/protonats"
 )
 
 type ServerOpts struct {

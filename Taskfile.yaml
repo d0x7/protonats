@@ -2,9 +2,13 @@ version: 3
 
 tasks:
   build-go:
-    desc: Build the plugin
+    desc: Build go code
     cmds:
-      - go build go/...
+      - go build ./...
+  test-go:
+    desc: Test go code
+    cmds:
+      - go test -parallel 8 -v ./...
   proto:
     desc: Generate protobuf files
     cmds:

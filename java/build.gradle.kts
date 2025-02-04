@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.xiamli"
-version = "0.0.1-RELEASE"
+version = "0.0.2-SNAPSHOT"
 
 repositories {
     mavenCentral()

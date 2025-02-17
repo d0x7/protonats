@@ -1,8 +1,11 @@
 package impl
 
 import (
-	"github.com/nats-io/nats.go/micro"
+	"context"
 	"time"
+
+	"github.com/nats-io/nats.go/micro"
+
 	"xiam.li/protonats/go/protonats"
 )
 
@@ -16,10 +19,16 @@ type ServerOpts struct {
 	StatsHandler             *micro.StatsHandler
 	DoneHandler              *micro.DoneHandler
 	ErrorHandler             *micro.ErrHandler
+	ServerContext            context.Context
+	UnaryInterceptorsChain   []protonats.UnaryMiddleware
 }
 
 func ProcessServerOptions(config *micro.Config, opts ...protonats.ServerOption) *ServerOpts {
 	options := new(ServerOpts)
+
+	// Set defaults
+	options.ServerContext = context.Background()
+
 	for _, opt := range opts {
 		opt(options)
 	}
@@ -60,6 +69,14 @@ func (opts *ServerOpts) WithoutLeaderFns() {
 
 func (opts *ServerOpts) WithoutFollowerFns() {
 	opts.WithoutFollowerFunctions = true
+}
+
+func (opts *ServerOpts) SetServerContext(ctx context.Context) {
+	opts.ServerContext = ctx
+}
+
+func (opts *ServerOpts) SetUnaryInterceptorsChain(unaryInterceptors ...protonats.UnaryMiddleware) {
+	opts.UnaryInterceptorsChain = unaryInterceptors
 }
 
 func (opts *ServerOpts) SetExtraSubject(extraSubject string) {

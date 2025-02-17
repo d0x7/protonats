@@ -1,13 +1,16 @@
 package impl
 
 import (
+	"log/slog"
+
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/micro"
-	"log/slog"
+
 	"xiam.li/protonats/go/protonats"
 )
 
-func NewService(name string, conn *nats.Conn, impl any, opts ...protonats.ServerOption) (micro.Service, *ServerOpts, error) {
+func NewService(name string, conn *nats.Conn, impl any, opts ...protonats.ServerOption) (micro.Service, *ServerOpts,
+	error) {
 	config := micro.Config{
 		Name:    name,
 		Version: "1.0.0",
@@ -38,4 +41,12 @@ func NewService(name string, conn *nats.Conn, impl any, opts ...protonats.Server
 	}
 
 	return service, options, nil
+}
+
+func ApplyMiddlewares(handler protonats.UnaryMiddlewareHandler,
+	middlewares ...protonats.UnaryMiddleware) protonats.UnaryMiddlewareHandler {
+	for i := len(middlewares) - 1; i >= 0; i-- {
+		handler = middlewares[i](handler)
+	}
+	return handler
 }

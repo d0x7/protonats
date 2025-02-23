@@ -1,9 +1,17 @@
 package protonats
 
 import (
-	"github.com/nats-io/nats.go/micro"
+	"context"
 	"time"
+
+	"github.com/nats-io/nats.go/micro"
 )
+
+// ServerUnaryMiddlewareHandler ServerUnaryMiddleware handler function
+type ServerUnaryMiddlewareHandler func(ctx context.Context, request micro.Request)
+
+// ServerUnaryMiddleware used to intercept requests before they are processed by server handler function
+type ServerUnaryMiddleware func(next ServerUnaryMiddlewareHandler) ServerUnaryMiddlewareHandler
 
 // Those handler interfaces can be implemented by the respective NATS server impl,
 //as an alternative to setting a handler via an option when creating the server.
@@ -41,6 +49,8 @@ type ServerOptions interface {
 	WithoutLeaderFns()
 	WithoutFollowerFns()
 	SetExtraSubject(string)
+	SetServerContext(ctx context.Context)
+	SetUnaryMiddlewareChain(unaryInterceptors ...ServerUnaryMiddleware)
 }
 
 type ServerOption func(options ServerOptions)
@@ -98,5 +108,21 @@ func WithoutFollowerFns() ServerOption {
 func WithExtraSubjectSrv(extraSubject string) ServerOption {
 	return func(options ServerOptions) {
 		options.SetExtraSubject(extraSubject)
+	}
+}
+
+// WithServerContext sets server context.
+// Used as a base context for all interceptors and requests.
+func WithServerContext(ctx context.Context) ServerOption {
+	return func(options ServerOptions) {
+		options.SetServerContext(ctx)
+	}
+}
+
+// WithServerUnaryInterceptorChain sets a chain of unary interceptors.
+// Used to process request before passed to server implementation.
+func WithServerUnaryInterceptorChain(unaryInterceptorsChain ...ServerUnaryMiddleware) ServerOption {
+	return func(options ServerOptions) {
+		options.SetUnaryMiddlewareChain(unaryInterceptorsChain...)
 	}
 }

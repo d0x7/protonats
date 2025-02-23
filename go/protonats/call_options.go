@@ -13,6 +13,7 @@ type CallOptions interface {
 	WithoutFinisher()
 	SetExtraSubject(subject string)
 	SetContext(ctx context.Context)
+	WithHeader(header, value string)
 }
 
 type CallOption func(options CallOptions)
@@ -61,5 +62,12 @@ func WithExtraSubject(extraSubject string) CallOption {
 func WithContext(ctx context.Context) CallOption {
 	return func(options CallOptions) {
 		options.SetContext(ctx)
+	}
+}
+
+// WithHeader sets the header for the call.
+func WithHeader(header, value string) CallOption {
+	return func(options CallOptions) {
+		options.WithHeader(header, value)
 	}
 }

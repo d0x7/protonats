@@ -3,6 +3,9 @@ package impl
 import (
 	"context"
 	"time"
+
+	"github.com/nats-io/nats.go"
+
 	"xiam.li/protonats/go/protonats"
 )
 
@@ -14,6 +17,17 @@ type CallOpts struct {
 	Context         context.Context
 	DisableFinisher bool
 	ExtraSubject    string
+	Headers         nats.Header
+}
+
+func (opts *CallOpts) WithHeader(header, value string) {
+	if opts.Headers == nil {
+		opts.Headers = make(nats.Header)
+	}
+	if opts.Headers[header] == nil {
+		opts.Headers[header] = make([]string, 0)
+	}
+	opts.Headers[header] = append(opts.Headers[header], value)
 }
 
 func (opts *CallOpts) WithoutFinisher() {

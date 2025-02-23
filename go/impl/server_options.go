@@ -20,7 +20,7 @@ type ServerOpts struct {
 	DoneHandler              *micro.DoneHandler
 	ErrorHandler             *micro.ErrHandler
 	ServerContext            context.Context
-	UnaryInterceptorsChain   []protonats.UnaryMiddleware
+	UnaryMiddlewareChain     []protonats.ServerUnaryMiddleware
 }
 
 func ProcessServerOptions(config *micro.Config, opts ...protonats.ServerOption) *ServerOpts {
@@ -75,8 +75,8 @@ func (opts *ServerOpts) SetServerContext(ctx context.Context) {
 	opts.ServerContext = ctx
 }
 
-func (opts *ServerOpts) SetUnaryInterceptorsChain(unaryInterceptors ...protonats.UnaryMiddleware) {
-	opts.UnaryInterceptorsChain = unaryInterceptors
+func (opts *ServerOpts) SetUnaryMiddlewareChain(unaryMiddlewares ...protonats.ServerUnaryMiddleware) {
+	opts.UnaryMiddlewareChain = unaryMiddlewares
 }
 
 func (opts *ServerOpts) SetExtraSubject(extraSubject string) {
@@ -99,3 +99,11 @@ func _subject(subject, extra, suffix string) string {
 
 // Interface guard
 var _ protonats.ServerOptions = (*ServerOpts)(nil)
+
+func ApplyServerUnaryMiddlewares(handler protonats.ServerUnaryMiddlewareHandler,
+	middlewares ...protonats.ServerUnaryMiddleware) protonats.ServerUnaryMiddlewareHandler {
+	for i := len(middlewares) - 1; i >= 0; i-- {
+		handler = middlewares[i](handler)
+	}
+	return handler
+}

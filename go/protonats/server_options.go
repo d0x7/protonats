@@ -7,11 +7,11 @@ import (
 	"github.com/nats-io/nats.go/micro"
 )
 
-// UnaryMiddlewareHandler UnaryMiddleware handler function
-type UnaryMiddlewareHandler func(ctx context.Context, request micro.Request)
+// ServerUnaryMiddlewareHandler ServerUnaryMiddleware handler function
+type ServerUnaryMiddlewareHandler func(ctx context.Context, request micro.Request)
 
-// UnaryMiddleware used to intercept requests before they are processed by server handler function
-type UnaryMiddleware func(next UnaryMiddlewareHandler) UnaryMiddlewareHandler
+// ServerUnaryMiddleware used to intercept requests before they are processed by server handler function
+type ServerUnaryMiddleware func(next ServerUnaryMiddlewareHandler) ServerUnaryMiddlewareHandler
 
 // Those handler interfaces can be implemented by the respective NATS server impl,
 //as an alternative to setting a handler via an option when creating the server.
@@ -50,7 +50,7 @@ type ServerOptions interface {
 	WithoutFollowerFns()
 	SetExtraSubject(string)
 	SetServerContext(ctx context.Context)
-	SetUnaryInterceptorsChain(unaryInterceptors ...UnaryMiddleware)
+	SetUnaryMiddlewareChain(unaryInterceptors ...ServerUnaryMiddleware)
 }
 
 type ServerOption func(options ServerOptions)
@@ -119,10 +119,10 @@ func WithServerContext(ctx context.Context) ServerOption {
 	}
 }
 
-// WithUnaryInterceptorChain sets a chain of unary interceptors.
+// WithServerUnaryInterceptorChain sets a chain of unary interceptors.
 // Used to process request before passed to server implementation.
-func WithUnaryInterceptorChain(unaryInterceptorsChain ...UnaryMiddleware) ServerOption {
+func WithServerUnaryInterceptorChain(unaryInterceptorsChain ...ServerUnaryMiddleware) ServerOption {
 	return func(options ServerOptions) {
-		options.SetUnaryInterceptorsChain(unaryInterceptorsChain...)
+		options.SetUnaryMiddlewareChain(unaryInterceptorsChain...)
 	}
 }

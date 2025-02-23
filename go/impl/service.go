@@ -42,11 +42,3 @@ func NewService(name string, conn *nats.Conn, impl any, opts ...protonats.Server
 
 	return service, options, nil
 }
-
-func ApplyMiddlewares(handler protonats.UnaryMiddlewareHandler,
-	middlewares ...protonats.UnaryMiddleware) protonats.UnaryMiddlewareHandler {
-	for i := len(middlewares) - 1; i >= 0; i-- {
-		handler = middlewares[i](handler)
-	}
-	return handler
-}

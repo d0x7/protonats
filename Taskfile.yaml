@@ -12,4 +12,4 @@ tasks:
   proto:
     desc: Generate protobuf files
     cmds:
-      - fd -t f -e proto . proto -x protoc -I proto --go_out=go/protonats --go_opt=paths=source_relative --java_out=java/src/main/protobuf {}
+      - fd -t f -e proto -0 | xargs -0 protoc -I proto --go_out=go/protonats --go_opt=paths=source_relative --java_out=java/src/main/protobuf

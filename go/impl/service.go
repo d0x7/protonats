@@ -1,13 +1,16 @@
 package impl
 
 import (
+	"log/slog"
+
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/micro"
-	"log/slog"
+
 	"xiam.li/protonats/go/protonats"
 )
 
-func NewService(name string, conn *nats.Conn, impl any, opts ...protonats.ServerOption) (micro.Service, *ServerOpts, error) {
+func NewService(name string, conn *nats.Conn, impl any, opts ...protonats.ServerOption) (micro.Service, *ServerOpts,
+	error) {
 	config := micro.Config{
 		Name:    name,
 		Version: "1.0.0",

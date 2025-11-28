@@ -1,6 +1,7 @@
 package protonats
 
 import (
+	"context"
 	"time"
 
 	"github.com/nats-io/nats.go/micro"
@@ -44,6 +45,7 @@ type ServerOptions interface {
 	SetExtraSubject(string)
 	AddUnaryInterceptor(UnaryServerInterceptor)
 	ChainUnaryInterceptors(...UnaryServerInterceptor)
+	SetBaseContext(context.Context)
 }
 
 type ServerOption func(options ServerOptions)
@@ -101,6 +103,13 @@ func WithoutFollowerFns() ServerOption {
 func WithExtraSubjectSrv(extraSubject string) ServerOption {
 	return func(options ServerOptions) {
 		options.SetExtraSubject(extraSubject)
+	}
+}
+
+// WithBaseContext sets the base context for the server, used as the parent context in all handlers.
+func WithBaseContext(ctx context.Context) ServerOption {
+	return func(options ServerOptions) {
+		options.SetBaseContext(ctx)
 	}
 }
 

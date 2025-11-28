@@ -1,6 +1,7 @@
 package impl
 
 import (
+	"context"
 	"time"
 
 	"github.com/nats-io/nats.go/micro"
@@ -14,6 +15,7 @@ type ServerOpts struct {
 	WithoutFollowerFunctions bool
 	ServiceVersion           string
 	ExtraSubject             string
+	BaseContext              context.Context
 	StatsHandler             *micro.StatsHandler
 	DoneHandler              *micro.DoneHandler
 	ErrorHandler             *micro.ErrHandler
@@ -83,11 +85,11 @@ func (opts *ServerOpts) SetExtraSubject(extraSubject string) {
 	opts.ExtraSubject = extraSubject
 }
 
+func (opts *ServerOpts) SetBaseContext(ctx context.Context) {
+	opts.BaseContext = ctx
+}
+
 func (opts *ServerOpts) AddUnaryInterceptor(interceptor protonats.UnaryServerInterceptor) {
-	//if opts.UnaryInterceptor != nil {
-	//	panic("The unary server interceptor was already set and may not be reset.")
-	//}
-	//opts.UnaryInterceptor = interceptor
 	opts.chainUnaryInterceptors = append(opts.chainUnaryInterceptors, interceptor)
 }
 
@@ -97,6 +99,13 @@ func (opts *ServerOpts) ChainUnaryInterceptors(interceptors ...protonats.UnarySe
 
 func (opts *ServerOpts) Subject(subject, suffix string) micro.EndpointOpt {
 	return micro.WithEndpointSubject(_subject(subject, opts.ExtraSubject, suffix))
+}
+
+func (opts *ServerOpts) Ctx() context.Context {
+	if opts.BaseContext != nil {
+		return opts.BaseContext
+	}
+	return context.Background()
 }
 
 func _subject(subject, extra, suffix string) string {

@@ -1,7 +1,6 @@
 package protonats
 
 import (
-	"context"
 	"time"
 )
 
@@ -9,10 +8,8 @@ import (
 type CallOptions interface {
 	SetInstanceID(string)
 	SetTimeout(time.Duration)
-	SetRetry(int, time.Duration, time.Duration, context.Context)
 	WithoutFinisher()
 	SetExtraSubject(subject string)
-	SetContext(ctx context.Context)
 }
 
 type CallOption func(options CallOptions)
@@ -31,14 +28,6 @@ func WithTimeout(timeout time.Duration) CallOption {
 	}
 }
 
-// WithRetry sets the number of retries, the minimum wait time, the maximum wait time, and the context for the call.
-// Only used when NATS returns a NoResponders error, more or less efficiently "queueing" calls.
-func WithRetry(ctx context.Context, minWait, maxWait time.Duration, maxTries int) CallOption {
-	return func(opts CallOptions) {
-		opts.SetRetry(maxTries, minWait, maxWait, ctx)
-	}
-}
-
 // WithoutFinisher disables the use of a finisher, which would return early
 // after the first response when no further response is received after 250 ms
 func WithoutFinisher() CallOption {
@@ -52,14 +41,5 @@ func WithoutFinisher() CallOption {
 func WithExtraSubject(extraSubject string) CallOption {
 	return func(options CallOptions) {
 		options.SetExtraSubject(extraSubject)
-	}
-}
-
-// WithContext sets the context for the call.
-// Not necessary to use when WithRetry is used, as the context
-// passed is shared and can be overridden the function called last.
-func WithContext(ctx context.Context) CallOption {
-	return func(options CallOptions) {
-		options.SetContext(ctx)
 	}
 }

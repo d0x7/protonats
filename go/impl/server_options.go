@@ -17,6 +17,9 @@ type ServerOpts struct {
 	StatsHandler             *micro.StatsHandler
 	DoneHandler              *micro.DoneHandler
 	ErrorHandler             *micro.ErrHandler
+	UnaryInterceptor         protonats.UnaryServerInterceptor
+
+	chainUnaryInterceptors []protonats.UnaryServerInterceptor
 }
 
 func ProcessServerOptions(config *micro.Config, opts ...protonats.ServerOption) *ServerOpts {
@@ -36,6 +39,19 @@ func ProcessServerOptions(config *micro.Config, opts ...protonats.ServerOption) 
 	if options.ErrorHandler != nil {
 		config.ErrorHandler = *options.ErrorHandler
 	}
+
+	// Chain unary interceptors
+
+	var chainedInterceptors protonats.UnaryServerInterceptor
+	if len(options.chainUnaryInterceptors) == 0 {
+		chainedInterceptors = nil
+	} else if len(options.chainUnaryInterceptors) == 1 {
+		chainedInterceptors = options.chainUnaryInterceptors[0]
+	} else {
+		chainedInterceptors = chainUnaryInterceptors(options.chainUnaryInterceptors)
+	}
+	options.UnaryInterceptor = chainedInterceptors
+
 	return options
 }
 
@@ -65,6 +81,18 @@ func (opts *ServerOpts) WithoutFollowerFns() {
 
 func (opts *ServerOpts) SetExtraSubject(extraSubject string) {
 	opts.ExtraSubject = extraSubject
+}
+
+func (opts *ServerOpts) AddUnaryInterceptor(interceptor protonats.UnaryServerInterceptor) {
+	//if opts.UnaryInterceptor != nil {
+	//	panic("The unary server interceptor was already set and may not be reset.")
+	//}
+	//opts.UnaryInterceptor = interceptor
+	opts.chainUnaryInterceptors = append(opts.chainUnaryInterceptors, interceptor)
+}
+
+func (opts *ServerOpts) ChainUnaryInterceptors(interceptors ...protonats.UnaryServerInterceptor) {
+	opts.chainUnaryInterceptors = append(opts.chainUnaryInterceptors, interceptors...)
 }
 
 func (opts *ServerOpts) Subject(subject, suffix string) micro.EndpointOpt {

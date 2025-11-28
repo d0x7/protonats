@@ -42,6 +42,8 @@ type ServerOptions interface {
 	WithoutLeaderFns()
 	WithoutFollowerFns()
 	SetExtraSubject(string)
+	AddUnaryInterceptor(UnaryServerInterceptor)
+	ChainUnaryInterceptors(...UnaryServerInterceptor)
 }
 
 type ServerOption func(options ServerOptions)
@@ -99,5 +101,17 @@ func WithoutFollowerFns() ServerOption {
 func WithExtraSubjectSrv(extraSubject string) ServerOption {
 	return func(options ServerOptions) {
 		options.SetExtraSubject(extraSubject)
+	}
+}
+
+func UnaryInterceptor(interceptor UnaryServerInterceptor) ServerOption {
+	return func(options ServerOptions) {
+		options.AddUnaryInterceptor(interceptor)
+	}
+}
+
+func ChainUnaryInterceptors(interceptors ...UnaryServerInterceptor) ServerOption {
+	return func(options ServerOptions) {
+		options.ChainUnaryInterceptors(interceptors...)
 	}
 }

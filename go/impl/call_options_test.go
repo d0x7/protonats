@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 	"time"
+
 	"xiam.li/protonats/go/protonats"
 )
 

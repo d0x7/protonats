@@ -1,9 +1,10 @@
 package impl
 
 import (
+	"log/slog"
+
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/micro"
-	"log/slog"
 	"xiam.li/protonats/go/protonats"
 )
 

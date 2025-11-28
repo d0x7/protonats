@@ -1,8 +1,9 @@
 package protonats
 
 import (
-	"github.com/nats-io/nats.go/micro"
 	"time"
+
+	"github.com/nats-io/nats.go/micro"
 )
 
 // Those handler interfaces can be implemented by the respective NATS server impl,

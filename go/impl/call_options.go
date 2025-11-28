@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 	"time"
+
 	"xiam.li/protonats/go/protonats"
 )
 

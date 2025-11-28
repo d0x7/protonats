@@ -1,8 +1,9 @@
 package impl
 
 import (
-	"github.com/nats-io/nats.go/micro"
 	"time"
+
+	"github.com/nats-io/nats.go/micro"
 	"xiam.li/protonats/go/protonats"
 )
 

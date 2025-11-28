@@ -2,6 +2,7 @@ package protonats
 
 import (
 	"fmt"
+
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/micro"
 	"github.com/pkg/errors"

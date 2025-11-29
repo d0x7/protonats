@@ -27,6 +27,9 @@ func HeadersFromOutgoingContext(ctx context.Context) nats.Header {
 
 // WithOutgoingHeaders puts NATS headers into the context for use in client interceptors.
 // It merges with existing headers if present.
+//
+// This must be called by the caller before passing the context to the client method.
+// Calling this inside an UnaryClientInterceptor will have no effect on the outgoing request.
 func WithOutgoingHeaders(ctx context.Context, h nats.Header) context.Context {
 	existing := HeadersFromOutgoingContext(ctx)
 	newHeaders := make(nats.Header)
@@ -49,6 +52,9 @@ func WithOutgoingHeaders(ctx context.Context, h nats.Header) context.Context {
 
 // WithOutgoingHeader adds a single NATS header key-value pair into the context for use in client interceptors.
 // It merges with existing headers if present.
+//
+// This must be called by the caller before passing the context to the client method.
+// Calling this inside an UnaryClientInterceptor will have no effect on the outgoing request.
 func WithOutgoingHeader(ctx context.Context, key, value string) context.Context {
 	existing := HeadersFromOutgoingContext(ctx)
 	newHeaders := make(nats.Header)
@@ -67,6 +73,9 @@ func WithOutgoingHeader(ctx context.Context, key, value string) context.Context 
 
 // WithOutgoingHeaderMap adds multiple NATS header key-value pairs into the context for use in client interceptors.
 // It merges with existing headers if present.
+//
+// This must be called by the caller before passing the context to the client method.
+// Calling this inside an UnaryClientInterceptor will have no effect on the outgoing request.
 func WithOutgoingHeaderMap(ctx context.Context, headers map[string]string) context.Context {
 	existing := HeadersFromOutgoingContext(ctx)
 	newHeaders := make(nats.Header)
@@ -88,12 +97,18 @@ func WithOutgoingHeaderMap(ctx context.Context, headers map[string]string) conte
 
 // SetOutgoingHeaders sets NATS headers into the context for use in client interceptors,
 // replacing any existing headers.
+//
+// This must be called by the caller before passing the context to the client method.
+// Calling this inside an UnaryClientInterceptor will have no effect on the outgoing request.
 func SetOutgoingHeaders(ctx context.Context, h nats.Header) context.Context {
 	return context.WithValue(ctx, OutgoingHeaderKey{}, h)
 }
 
 // SetOutgoingHeaderMap sets multiple NATS header key-value pairs into the context for use in client interceptors,
 // replacing any existing headers.
+//
+// This must be called by the caller before passing the context to the client method.
+// Calling this inside an UnaryClientInterceptor will have no effect on the outgoing request.
 func SetOutgoingHeaderMap(ctx context.Context, headers map[string]string) context.Context {
 	newHeaders := make(nats.Header)
 	for k, v := range headers {

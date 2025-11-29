@@ -8,12 +8,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Predefined Errors
-var (
-	ErrMarshallingFailed   = errors.New("Failed to marshal proto message")
-	ErrUnmarshallingFailed = errors.New("Failed to unmarshal proto message")
-)
-
 // ServiceError is returned when the server returns an error instead of the expected message.
 type ServiceError struct {
 	Code, Description, Details string

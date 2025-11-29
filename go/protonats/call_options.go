@@ -2,6 +2,8 @@ package protonats
 
 import (
 	"time"
+
+	"github.com/nats-io/nats.go"
 )
 
 // CallOptions to be used when calling a method.
@@ -10,6 +12,9 @@ type CallOptions interface {
 	SetTimeout(time.Duration)
 	WithoutFinisher()
 	SetExtraSubject(subject string)
+
+	AddResponseHeaderPointer(target *nats.Header)
+	AddResponseInstanceIDPointer(target *string)
 }
 
 type CallOption func(options CallOptions)
@@ -41,5 +46,19 @@ func WithoutFinisher() CallOption {
 func WithExtraSubject(extraSubject string) CallOption {
 	return func(options CallOptions) {
 		options.SetExtraSubject(extraSubject)
+	}
+}
+
+// ResponseHeader sets a pointer to receive the response headers.
+func ResponseHeader(target *nats.Header) CallOption {
+	return func(options CallOptions) {
+		options.AddResponseHeaderPointer(target)
+	}
+}
+
+// ResponseInstanceID sets a pointer to receive the instance ID of the responding service instance.
+func ResponseInstanceID(target *string) CallOption {
+	return func(options CallOptions) {
+		options.AddResponseInstanceIDPointer(target)
 	}
 }

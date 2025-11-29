@@ -3,6 +3,7 @@ package impl
 import (
 	"time"
 
+	"github.com/nats-io/nats.go"
 	"xiam.li/protonats/go/protonats"
 )
 
@@ -11,6 +12,9 @@ type CallOpts struct {
 	Timeout         time.Duration
 	DisableFinisher bool
 	ExtraSubject    string
+
+	responseHeaderPointers     []*nats.Header
+	responseInstanceIDPointers []*string
 }
 
 func (opts *CallOpts) WithoutFinisher() {
@@ -52,8 +56,46 @@ func (opts *CallOpts) SetExtraSubject(subject string) {
 	opts.ExtraSubject = subject
 }
 
+func (opts *CallOpts) AddResponseHeaderPointer(target *nats.Header) {
+	if target != nil {
+		opts.responseHeaderPointers = append(opts.responseHeaderPointers, target)
+	}
+}
+
+func (opts *CallOpts) AddResponseInstanceIDPointer(target *string) {
+	if target != nil {
+		opts.responseInstanceIDPointers = append(opts.responseInstanceIDPointers, target)
+	}
+}
+
 func (opts *CallOpts) Subject(subject string) string {
 	return Subject(subject, opts.ExtraSubject, opts.InstanceID)
+}
+
+func (opts *CallOpts) ApplyResponseHeaders(h nats.Header) {
+	if h == nil {
+		return
+	}
+
+	if len(opts.responseHeaderPointers) > 0 {
+		for _, target := range opts.responseHeaderPointers {
+			// Copy to avoid mutation issues
+			*target = make(nats.Header, len(h))
+			for k, v := range h {
+				valCopy := make([]string, len(v))
+				copy(valCopy, v)
+				(*target)[k] = valCopy
+			}
+		}
+	}
+
+	if len(opts.responseInstanceIDPointers) > 0 {
+		if id := h.Get(ServiceIDHeader); id != "" {
+			for _, target := range opts.responseInstanceIDPointers {
+				*target = id
+			}
+		}
+	}
 }
 
 // Interface guard

@@ -8,6 +8,10 @@ import (
 	"xiam.li/protonats/go/protonats"
 )
 
+var (
+	ServiceIDHeader = "ProtoNATS-Service-ID"
+)
+
 func NewService(name string, conn *nats.Conn, impl any, opts ...protonats.ServerOption) (micro.Service, *ServerOpts, error) {
 	config := micro.Config{
 		Name:    name,

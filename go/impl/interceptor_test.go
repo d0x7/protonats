@@ -1,4 +1,4 @@
-package impl
+package impl_test
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"xiam.li/protonats/go/impl"
 	"xiam.li/protonats/go/protonats"
 )
 
@@ -49,7 +50,7 @@ func TestClientInterceptor_Ordering(t *testing.T) {
 
 	// Build the chain
 	clientOpts := protonats.WithChainUnaryInterceptor(int1, int2)
-	options := ProcessClientOptions(clientOpts)
+	options := impl.ProcessClientOptions(clientOpts)
 	chain := options.UnaryInterceptor
 
 	// Run
@@ -85,7 +86,7 @@ func TestClientInterceptor_HeaderMutation(t *testing.T) {
 		return nil
 	}
 
-	options := ProcessClientOptions(protonats.WithUnaryInterceptor(authInterceptor))
+	options := impl.ProcessClientOptions(protonats.WithUnaryInterceptor(authInterceptor))
 	chain := options.UnaryInterceptor
 
 	headers := make(nats.Header)
@@ -109,7 +110,7 @@ func TestClientInterceptor_ErrorStopsChain(t *testing.T) {
 		return nil
 	}
 
-	options := ProcessClientOptions(protonats.WithUnaryInterceptor(badInterceptor))
+	options := impl.ProcessClientOptions(protonats.WithUnaryInterceptor(badInterceptor))
 	chain := options.UnaryInterceptor
 
 	// Note: We simulate the geerated code creating the map
@@ -147,7 +148,7 @@ func TestUnaryServerInterceptor_Ordering(t *testing.T) {
 	}
 
 	// Build the chain
-	options := ProcessServerOptions(&micro.Config{}, protonats.ChainUnaryInterceptors(loggingInt, authInt))
+	options := impl.ProcessServerOptions(&micro.Config{}, protonats.ChainUnaryInterceptors(loggingInt, authInt))
 	chain := options.UnaryInterceptor
 
 	// Run
@@ -186,7 +187,7 @@ func TestUnaryServerInterceptor_ContextModification(t *testing.T) {
 		return &TestMsg{}, nil
 	}
 
-	options := ProcessServerOptions(&micro.Config{}, protonats.UnaryInterceptor(ctxInt))
+	options := impl.ProcessServerOptions(&micro.Config{}, protonats.UnaryInterceptor(ctxInt))
 	chain := options.UnaryInterceptor
 
 	// Run

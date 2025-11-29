@@ -1,15 +1,16 @@
-package impl
+package impl_test
 
 import (
 	"reflect"
 	"testing"
 
 	"github.com/nats-io/nats.go/micro"
+	"xiam.li/protonats/go/impl"
 	"xiam.li/protonats/go/protonats"
 )
 
 func TestServerOpts_WithServiceVersion(t *testing.T) {
-	opts := new(ServerOpts)
+	opts := new(impl.ServerOpts)
 	protonats.WithServiceVersion("test")(opts)
 	if opts.ServiceVersion != "test" {
 		t.Error("ServiceVersion not set correctly")
@@ -17,7 +18,7 @@ func TestServerOpts_WithServiceVersion(t *testing.T) {
 }
 
 func TestServerOpts_WithoutFollowerFns(t *testing.T) {
-	opts := new(ServerOpts)
+	opts := new(impl.ServerOpts)
 	protonats.WithoutFollowerFns()(opts)
 	if !opts.WithoutFollowerFunctions {
 		t.Error("WithoutFollowerFunctions not set correctly")
@@ -25,7 +26,7 @@ func TestServerOpts_WithoutFollowerFns(t *testing.T) {
 }
 
 func TestServerOpts_WithoutLeaderFns(t *testing.T) {
-	opts := new(ServerOpts)
+	opts := new(impl.ServerOpts)
 	protonats.WithoutLeaderFns()(opts)
 	if !opts.WithoutLeaderFunctions {
 		t.Error("WithoutLeaderFunctions not set correctly")
@@ -33,7 +34,7 @@ func TestServerOpts_WithoutLeaderFns(t *testing.T) {
 }
 
 func TestServerOpts_WithExtraSubject(t *testing.T) {
-	opts := new(ServerOpts)
+	opts := new(impl.ServerOpts)
 	protonats.WithExtraSubjectSrv("test")(opts)
 	if opts.ExtraSubject != "test" {
 		t.Error("ExtraSubject not set correctly")
@@ -43,22 +44,22 @@ func TestServerOpts_WithExtraSubject(t *testing.T) {
 func TestServerOpts_Subject(t *testing.T) {
 	const empty = ""
 	t.Run("WithoutExtraOrSuffix", func(t *testing.T) {
-		if _subject("topic", empty, empty) != "topic" {
+		if impl.Subject("topic", empty, empty) != "topic" {
 			t.Error("Subject not set correctly")
 		}
 	})
 	t.Run("WithExtra", func(t *testing.T) {
-		if _subject("topic", "extra", empty) != "topic.extra" {
+		if impl.Subject("topic", "extra", empty) != "topic.extra" {
 			t.Error("Subject not set correctly")
 		}
 	})
 	t.Run("WithSuffix", func(t *testing.T) {
-		if _subject("topic", empty, "suffix") != "topic.suffix" {
+		if impl.Subject("topic", empty, "suffix") != "topic.suffix" {
 			t.Error("Subject not set correctly")
 		}
 	})
 	t.Run("WithExtraAndSuffix", func(t *testing.T) {
-		if _subject("topic", "extra", "suffix") != "topic.extra.suffix" {
+		if impl.Subject("topic", "extra", "suffix") != "topic.extra.suffix" {
 			t.Error("Subject not set correctly")
 		}
 	})
@@ -72,7 +73,7 @@ func TestProcessServerOptions(t *testing.T) {
 		doneHandler := func(_ micro.Service) {}
 		errHandler := func(_ micro.Service, _ *micro.NATSError) {}
 		config := new(micro.Config)
-		opts := ProcessServerOptions(
+		opts := impl.ProcessServerOptions(
 			config,
 			protonats.WithServiceVersion("test"),
 			protonats.WithStatsHandler(statsHandler),

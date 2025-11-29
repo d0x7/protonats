@@ -98,7 +98,7 @@ func (opts *ServerOpts) ChainUnaryInterceptors(interceptors ...protonats.UnarySe
 }
 
 func (opts *ServerOpts) Subject(subject, suffix string) micro.EndpointOpt {
-	return micro.WithEndpointSubject(_subject(subject, opts.ExtraSubject, suffix))
+	return micro.WithEndpointSubject(Subject(subject, opts.ExtraSubject, suffix))
 }
 
 func (opts *ServerOpts) Ctx() context.Context {
@@ -108,7 +108,7 @@ func (opts *ServerOpts) Ctx() context.Context {
 	return context.Background()
 }
 
-func _subject(subject, extra, suffix string) string {
+func Subject(subject, extra, suffix string) string {
 	if extra != "" {
 		subject += "." + extra
 	}

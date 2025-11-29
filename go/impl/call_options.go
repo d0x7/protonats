@@ -53,7 +53,7 @@ func (opts *CallOpts) SetExtraSubject(subject string) {
 }
 
 func (opts *CallOpts) Subject(subject string) string {
-	return _subject(subject, opts.ExtraSubject, opts.InstanceID)
+	return Subject(subject, opts.ExtraSubject, opts.InstanceID)
 }
 
 // Interface guard

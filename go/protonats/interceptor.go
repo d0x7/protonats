@@ -11,7 +11,19 @@ type MethodInfo struct {
 	Subject string
 	Service string
 	Method  string
+	Type    MethodType
 }
+
+//go:generate go run github.com/dmarkham/enumer -type=MethodType -trimprefix=MethodType -output=methodtype_enum.go
+type MethodType uint8
+
+const (
+	MethodTypeUnary MethodType = iota + 1
+	MethodTypeStream
+	MethodTypeBroadcast
+	MethodTypeLeader
+	MethodTypeFollower
+)
 
 func (m *MethodInfo) FullMethod() string {
 	return m.Service + "." + m.Method

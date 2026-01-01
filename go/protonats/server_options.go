@@ -40,8 +40,6 @@ type ServerOptions interface {
 	SetDoneHandler(micro.DoneHandler)
 	SetErrorHandler(micro.ErrHandler)
 	SetServiceVersion(string)
-	WithoutLeaderFns()
-	WithoutFollowerFns()
 	SetExtraSubject(string)
 	AddUnaryInterceptor(UnaryServerInterceptor)
 	ChainUnaryInterceptors(...UnaryServerInterceptor)
@@ -82,24 +80,9 @@ func WithServiceVersion(version string) ServerOption {
 	}
 }
 
-// WithoutLeaderFns disables registration of functions marked as LEADER via protonats.consensus_target.
-// Only has an effect when used with the NewMyServiceNATSServer function, and not the respective Leader/Follower functions.
-func WithoutLeaderFns() ServerOption {
-	return func(options ServerOptions) {
-		options.WithoutLeaderFns()
-	}
-}
-
-// WithoutFollowerFns disables registration of functions marked as FOLLOWER via protonats.consensus_target.
-// Only has an effect when used with the NewMyServiceNATSServer function, and not the respective Leader/Follower functions.
-func WithoutFollowerFns() ServerOption {
-	return func(options ServerOptions) {
-		options.WithoutFollowerFns()
-	}
-}
-
 // WithExtraSubjectSrv sets an extra subject for the subjects used by the microservice.
 // Primarily used for consensus algorithms to distinguish between different services, while using the same implementation.
+// Deprecated: previously used for consensus integration, shouldn't be used and will be removed in future versions.
 func WithExtraSubjectSrv(extraSubject string) ServerOption {
 	return func(options ServerOptions) {
 		options.SetExtraSubject(extraSubject)

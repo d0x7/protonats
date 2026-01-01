@@ -11,11 +11,4 @@ option java_outer_classname = "ProtoNATS";
 // Options used by the ProtoNATS plugin.
 extend google.protobuf.MethodOptions {
   bool broadcast = 526714442;
-  ConsensusTarget consensus_target = 526714443;
-}
-
-// ConsensusTarget is an enum used to specify the target of a consensus-based operation.
-enum ConsensusTarget {
-  FOLLOWER = 0;
-  LEADER = 1;
 }

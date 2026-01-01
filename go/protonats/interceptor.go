@@ -21,8 +21,6 @@ const (
 	MethodTypeUnary MethodType = iota + 1
 	MethodTypeStream
 	MethodTypeBroadcast
-	MethodTypeLeader
-	MethodTypeFollower
 )
 
 func (m *MethodInfo) FullMethod() string {

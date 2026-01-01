@@ -17,22 +17,6 @@ func TestServerOpts_WithServiceVersion(t *testing.T) {
 	}
 }
 
-func TestServerOpts_WithoutFollowerFns(t *testing.T) {
-	opts := new(impl.ServerOpts)
-	protonats.WithoutFollowerFns()(opts)
-	if !opts.WithoutFollowerFunctions {
-		t.Error("WithoutFollowerFunctions not set correctly")
-	}
-}
-
-func TestServerOpts_WithoutLeaderFns(t *testing.T) {
-	opts := new(impl.ServerOpts)
-	protonats.WithoutLeaderFns()(opts)
-	if !opts.WithoutLeaderFunctions {
-		t.Error("WithoutLeaderFunctions not set correctly")
-	}
-}
-
 func TestServerOpts_WithExtraSubject(t *testing.T) {
 	opts := new(impl.ServerOpts)
 	protonats.WithExtraSubjectSrv("test")(opts)

@@ -43,6 +43,7 @@ func WithoutFinisher() CallOption {
 
 // WithExtraSubject sets an extra subject for the subjects used by the microservice.
 // Primarily used for consensus algorithms to distinguish between different services, while using the same implementation.
+// Deprecated: previously used for consensus integration, shouldn't be used and will be removed in future versions.
 func WithExtraSubject(extraSubject string) CallOption {
 	return func(options CallOptions) {
 		options.SetExtraSubject(extraSubject)

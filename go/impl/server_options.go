@@ -9,17 +9,15 @@ import (
 )
 
 type ServerOpts struct {
-	InstanceID               string
-	Timeout                  time.Duration
-	WithoutLeaderFunctions   bool
-	WithoutFollowerFunctions bool
-	ServiceVersion           string
-	ExtraSubject             string
-	BaseContext              context.Context
-	StatsHandler             *micro.StatsHandler
-	DoneHandler              *micro.DoneHandler
-	ErrorHandler             *micro.ErrHandler
-	UnaryInterceptor         protonats.UnaryServerInterceptor
+	InstanceID       string
+	Timeout          time.Duration
+	ServiceVersion   string
+	ExtraSubject     string
+	BaseContext      context.Context
+	StatsHandler     *micro.StatsHandler
+	DoneHandler      *micro.DoneHandler
+	ErrorHandler     *micro.ErrHandler
+	UnaryInterceptor protonats.UnaryServerInterceptor
 
 	chainUnaryInterceptors []protonats.UnaryServerInterceptor
 }
@@ -71,14 +69,6 @@ func (opts *ServerOpts) SetErrorHandler(handler micro.ErrHandler) {
 
 func (opts *ServerOpts) SetServiceVersion(serviceVersion string) {
 	opts.ServiceVersion = serviceVersion
-}
-
-func (opts *ServerOpts) WithoutLeaderFns() {
-	opts.WithoutLeaderFunctions = true
-}
-
-func (opts *ServerOpts) WithoutFollowerFns() {
-	opts.WithoutFollowerFunctions = true
 }
 
 func (opts *ServerOpts) SetExtraSubject(extraSubject string) {

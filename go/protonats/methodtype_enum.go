@@ -7,11 +7,11 @@ import (
 	"strings"
 )
 
-const _MethodTypeName = "UnaryStreamBroadcastLeaderFollower"
+const _MethodTypeName = "UnaryStreamBroadcast"
 
-var _MethodTypeIndex = [...]uint8{0, 5, 11, 20, 26, 34}
+var _MethodTypeIndex = [...]uint8{0, 5, 11, 20}
 
-const _MethodTypeLowerName = "unarystreambroadcastleaderfollower"
+const _MethodTypeLowerName = "unarystreambroadcast"
 
 func (i MethodType) String() string {
 	i -= 1
@@ -28,11 +28,9 @@ func _MethodTypeNoOp() {
 	_ = x[MethodTypeUnary-(1)]
 	_ = x[MethodTypeStream-(2)]
 	_ = x[MethodTypeBroadcast-(3)]
-	_ = x[MethodTypeLeader-(4)]
-	_ = x[MethodTypeFollower-(5)]
 }
 
-var _MethodTypeValues = []MethodType{MethodTypeUnary, MethodTypeStream, MethodTypeBroadcast, MethodTypeLeader, MethodTypeFollower}
+var _MethodTypeValues = []MethodType{MethodTypeUnary, MethodTypeStream, MethodTypeBroadcast}
 
 var _MethodTypeNameToValueMap = map[string]MethodType{
 	_MethodTypeName[0:5]:        MethodTypeUnary,
@@ -41,18 +39,12 @@ var _MethodTypeNameToValueMap = map[string]MethodType{
 	_MethodTypeLowerName[5:11]:  MethodTypeStream,
 	_MethodTypeName[11:20]:      MethodTypeBroadcast,
 	_MethodTypeLowerName[11:20]: MethodTypeBroadcast,
-	_MethodTypeName[20:26]:      MethodTypeLeader,
-	_MethodTypeLowerName[20:26]: MethodTypeLeader,
-	_MethodTypeName[26:34]:      MethodTypeFollower,
-	_MethodTypeLowerName[26:34]: MethodTypeFollower,
 }
 
 var _MethodTypeNames = []string{
 	_MethodTypeName[0:5],
 	_MethodTypeName[5:11],
 	_MethodTypeName[11:20],
-	_MethodTypeName[20:26],
-	_MethodTypeName[26:34],
 }
 
 // MethodTypeString retrieves an enum value from the enum constants string name.

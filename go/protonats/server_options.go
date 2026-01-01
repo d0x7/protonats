@@ -90,6 +90,7 @@ func WithExtraSubjectSrv(extraSubject string) ServerOption {
 }
 
 // WithBaseContext sets the base context for the server, used as the parent context in all handlers.
+// This context will only be used as the parent context inside handlers, but is not monitored for cancellation or deadlines.
 func WithBaseContext(ctx context.Context) ServerOption {
 	return func(options ServerOptions) {
 		options.SetBaseContext(ctx)
